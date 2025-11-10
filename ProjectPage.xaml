@@ -1,0 +1,130 @@
+<Page x:Class="jpmc_genai.ProjectPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Background="#0F1419"
+      Title="ProjectPage">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Updated project card styling with modern dark theme -->
+            <Style TargetType="Border" x:Key="ProjectCardStyle">
+                <Setter Property="Background" Value="#1A1E27" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Margin" Value="12" />
+                <Setter Property="Padding" Value="20" />
+                <Setter Property="Width" Value="280" />
+                <Setter Property="Height" Value="180" />
+                <Setter Property="BorderBrush" Value="#333333" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="#000000" ShadowDepth="4" BlurRadius="8" Opacity="0.6" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!-- Updated text styling for dark theme with cyan accent -->
+            <Style TargetType="TextBlock" x:Key="CardTitleStyle">
+                <Setter Property="Foreground" Value="#00D4FF" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,8" />
+                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            </Style>
+            <Style TargetType="TextBlock" x:Key="CardTypeStyle">
+                <Setter Property="Foreground" Value="#888888" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="FontStyle" Value="Italic" />
+                <Setter Property="Margin" Value="0,0,0,6" />
+            </Style>
+            <Style TargetType="TextBlock" x:Key="CardDateStyle">
+                <Setter Property="Foreground" Value="#666666" />
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="Margin" Value="0,0,0,8" />
+            </Style>
+            <Style TargetType="TextBlock" x:Key="CardDescriptionStyle">
+                <Setter Property="Foreground" Value="#CCCCCC" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="MaxHeight" Value="60" />
+                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+            <!-- Transparent button with hover effect showing cyan border -->
+            <Style TargetType="Button" x:Key="CardButtonStyle">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Border" Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Border" Property="BorderBrush" Value="#00D4FF" />
+                                    <Setter TargetName="Border" Property="BorderThickness" Value="2" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid Background="#0F1419">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!-- Header section with title and logout button -->
+        <Border Grid.Row="0" Background="#1A1E27" Padding="30,20" BorderBrush="#333333" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="jpmcAI" Foreground="#00D4FF" FontSize="28" FontWeight="Bold" />
+                    <TextBlock Text="Select a Project to Begin" Foreground="#888888" FontSize="14" Margin="0,5,0,0" />
+                </StackPanel>
+                <Button Grid.Column="1" Content="Logout" Style="{StaticResource SidebarButtonStyle}" Click="Logout_Click" Width="100" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+        <!-- Projects content area with modern styling -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="#0F1419">
+            <StackPanel Margin="30,30,30,30">
+                <TextBlock Text="Your Projects" Foreground="#00D4FF" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" />
+                <ItemsControl ItemsSource="{Binding Projects}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource CardButtonStyle}" Click="ProjectCard_Click" Tag="{Binding projectid}">
+                                <Border Style="{StaticResource ProjectCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding title}" Style="{StaticResource CardTitleStyle}" />
+                                        <TextBlock Text="{Binding projecttype}" Style="{StaticResource CardTypeStyle}" />
+                                        <TextBlock Text="{Binding startdate}" Style="{StaticResource CardDateStyle}" />
+                                        <TextBlock Text="{Binding description}" Style="{StaticResource CardDescriptionStyle}" />
+                                    </StackPanel>
+                                </Border>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

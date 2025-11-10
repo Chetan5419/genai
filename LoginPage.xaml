@@ -1,0 +1,65 @@
+<Page x:Class="jpmc_genai.LoginPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1000"
+      Background="#0F1419"
+      Title="LoginPage">
+    <Grid>
+        <!-- Left side with branding -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="400" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Added left panel with gradient background and branding -->
+        <Border Grid.Column="0" Background="#1A1E27">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="jpmcAI" Foreground="#00D4FF" FontSize="48" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,10" />
+                <TextBlock Text="Automated Test Execution Platform" Foreground="#B0BEC5" FontSize="16" TextAlignment="Center" Margin="0,0,0,30" />
+                <TextBlock Text="Powered by AI-driven test automation" Foreground="#90A4AE" FontSize="13" TextAlignment="Center" />
+            </StackPanel>
+        </Border>
+
+        <!-- Right side with login form -->
+        <!-- Redesigned form layout with better spacing and styling -->
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="340">
+            <!-- Title -->
+            <TextBlock Text="Welcome Back" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,0,0,10" />
+            <TextBlock Text="Sign in to your account" Foreground="#B0BEC5" FontSize="13" Margin="0,0,0,30" />
+
+            <!-- Username Input -->
+            <TextBlock Text="Username" Foreground="#E0E0E0" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,8" />
+            <Grid Margin="0,0,0,15">
+                <TextBox x:Name="UsernameTextBox" Height="40" Padding="12,8" FontSize="13" />
+                <TextBlock Text="Enter your username" Style="{StaticResource PlaceholderStyle}" 
+                           Visibility="{Binding Text, ElementName=UsernameTextBox, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+            </Grid>
+
+            <!-- Password Input -->
+            <TextBlock Text="Password" Foreground="#E0E0E0" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,8" />
+            <Grid Margin="0,0,0,25">
+                <PasswordBox x:Name="PasswordBox" Height="40" Padding="12,8" FontSize="13" />
+                <TextBlock Text="Enter your password" Style="{StaticResource PlaceholderStyle}" 
+                           Visibility="{Binding Password, ElementName=PasswordBox, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+            </Grid>
+
+            <!-- Login Button -->
+            <Button Content="Sign In" Click="LoginButton_Click" Height="40" Margin="0,0,0,10" FontSize="13" FontWeight="SemiBold" Foreground="White" Background="#00D4FF" />
+
+            <!-- Divider -->
+            <Grid Margin="0,15,0,15">
+                <Border Background="#333333" Height="1" />
+                <TextBlock Text="or" Foreground="#757575" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#0F1419" Padding="8,0" />
+            </Grid>
+
+            <!-- Register Button -->
+            <Button Content="Create New Account" Click="RegisterButton_Click" Height="40" FontSize="13" FontWeight="SemiBold" Background="Transparent" BorderBrush="#00D4FF" BorderThickness="1" Foreground="#00D4FF" />
+
+            <!-- Footer -->
+            <TextBlock Text="© 2025 JPMC AI Platform" Foreground="#424242" FontSize="11" TextAlignment="Center" Margin="0,30,0,0" />
+        </StackPanel>
+    </Grid>
+</Page>

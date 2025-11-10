@@ -1,0 +1,136 @@
+<Page x:Class="jpmc_genai.DashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Background="#0F1419"
+      Title="DashboardPage">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <!-- Completely redesigned sidebar with modern layout - navigation buttons at top, project info card at bottom -->
+        <Border Background="#1A1E27" Grid.Column="0" BorderBrush="#00D4FF" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+                <!-- Header -->
+                <Border Grid.Row="0" Background="#00D4FF" Padding="15,20,15,20">
+                    <TextBlock Text="jpmcAI" Foreground="#0F1419" FontSize="18" FontWeight="Bold" TextAlignment="Center" />
+                </Border>
+                
+                <!-- Navigation Buttons (centered with proper spacing) -->
+                <StackPanel Grid.Row="1" Margin="12,25,12,0">
+                    <Button Content="← Back to Projects" Style="{StaticResource SidebarButtonStyle}" Click="BackToProjects_Click" Margin="0,0,0,12" />
+                    <Button Content="📊 Dashboard" Style="{StaticResource SidebarButtonStyle}" IsEnabled="False" Margin="0,0,0,8" />
+                    <Button Content="▶ AI Test Executor" Style="{StaticResource SidebarButtonStyle}" Click="AITestExecutor_Click" Margin="0,0,0,8" />
+                    <Button Content="⚙ Script Generator" Style="{StaticResource SidebarButtonStyle}" Click="ScriptGenerator_Click" Margin="0,0,0,8" />
+                    <Button Content="📋 Execution Log" Style="{StaticResource SidebarButtonStyle}" Click="ExecutionLog_Click" Margin="0,0,0,8" />
+                    <Button Content="📤 Upload Test Case" Style="{StaticResource SidebarButtonStyle}" Click="UploadTestCase_Click" Margin="0,0,0,8" />
+                </StackPanel>
+                
+                <!-- Project Info Card moved to bottom in modern card style -->
+                <Border Grid.Row="2" Margin="12,0,12,15" CornerRadius="8" Background="#252B33" BorderBrush="#333333" BorderThickness="1">
+                    <StackPanel Margin="15">
+                        <TextBlock Text="Current Project" Foreground="#00D4FF" FontSize="12" FontWeight="Bold" Margin="0,0,0,10" />
+                        <TextBlock x:Name="ProjectTitleTextBlock" Foreground="White" FontSize="14" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,8" />
+                        <TextBlock x:Name="ProjectDetailsTextBlock" Foreground="#A0A8B0" FontSize="10" TextWrapping="Wrap" LineHeight="16" Margin="0,0,0,12" />
+                        <Button Content="Change Project" Style="{StaticResource SidebarButtonStyle}" Click="ChangeProject_Click" Height="32" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        
+        <!-- Redesigned main content area with modern cards -->
+        <Grid Grid.Column="1" Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <!-- Header Bar -->
+            <Border Grid.Row="0" Background="#1A1E27" BorderBrush="#00D4FF" BorderThickness="0,0,0,1" Padding="25,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="300" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="Test Cases" Foreground="White" FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="Browse and select test cases" Foreground="#A0A8B0" FontSize="13" Margin="0,4,0,0" />
+                    </StackPanel>
+                    
+                    <!-- Improved search bar styling -->
+                    <Border Grid.Column="1" Background="#252B33" CornerRadius="6" BorderBrush="#333333" BorderThickness="1" Padding="12,8">
+                        <Grid>
+                            <TextBox x:Name="SearchTextBox" TextChanged="SearchTextBox_TextChanged" 
+                                     Background="Transparent" Foreground="White" BorderThickness="0" 
+                                     Padding="0" FontSize="13" />
+                            <TextBlock Text="Search by Test Case ID..." Style="{StaticResource PlaceholderStyle}" 
+                                       Visibility="{Binding Text, ElementName=SearchTextBox, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+            
+            <!-- Test Cases Grid -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding TestCases}" Margin="25,20">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <!-- Enhanced test case card design -->
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="220" Margin="8" CornerRadius="8" Background="#1A1E27" 
+                                    BorderBrush="#333333" BorderThickness="1">
+                                <Button Tag="{Binding testcaseid}" Click="TestCaseCard_Click" 
+                                        Background="Transparent" Foreground="White" BorderThickness="0" Padding="0">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="Border" Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="8" Padding="18">
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding testcaseid}" Foreground="#00D4FF" 
+                                                               FontSize="14" FontWeight="Bold" Margin="0,0,0,8" />
+                                                    <TextBlock Text="{Binding description}" Foreground="White" 
+                                                               FontSize="13" TextWrapping="Wrap" Margin="0,0,0,12" 
+                                                               MinHeight="40" />
+                                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                                        <Border Background="#00D4FF" CornerRadius="3" Padding="6,3">
+                                                            <TextBlock Text="View Details" Foreground="#0F1419" 
+                                                                       FontSize="11" FontWeight="SemiBold" />
+                                                        </Border>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Border" Property="Background" Value="#252B33" />
+                                                    <Setter TargetName="Border" Property="BorderBrush" Value="#00D4FF" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Page>
